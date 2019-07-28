@@ -19,6 +19,15 @@
 // ==/UserScript==
 
 
+/*
+    TODO
+    Implement fuctionally in hiyobi
+    remove reload function
+    paging without gupffy?
+    fix checkupdate function
+*/
+
+
 // update functions is currently disabled due to tampermonkey's cross origin warning
 // if you want use update function, make update_check true
 var update_check = false;
@@ -33,15 +42,6 @@ var goofy_enabled = false;
 var single_displayed = true;
 //var numThin = 0;
 //var portrait = false;
-
-var host_regex = /^(.+)\/\/(.+?)\/(.+)/g;
-var host = host_regex.exec(document.location)[2];
-if (host === 'exhentai.org')
-    API_URL = 'https://exhentai.org/api.php';
-else if (host === 'e-hentai.org')
-    API_URL = 'https://e-hentai.org/api.php';
-else
-    alert("Host unavailable!\nHOST: "+host);
 
 // remove original events.
 document.onkeydown = null;
@@ -422,6 +422,8 @@ var enable = function (elem) {
   elem.parent().removeClass('disabled');
   elem.children().addClass('icon_white');
 };
+
+
 var getToken = function (callback) {
   var page_regex = /^(?:.*?\/\/)(?:.*?\/)(?:.*?\/)(.*?)\/(\d*?)-(\d+)(?:\?.*)*(?:#\d+)*$/g;
   var match = page_regex.exec(document.location);
