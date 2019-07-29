@@ -6,9 +6,6 @@
 // @description   image viewer for hiyobi
 // @include       https://xn--9w3b15m8vo.asia/reader/*
 // @version       1
-// @require       https://code.jquery.com/jquery-3.2.1.min.js
-// @require       https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js
-// @resource      bt https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
 // @grant         GM_xmlhttpRequest
 // @grant         GM_getValue
 // @grant         GM_setValue
@@ -20,23 +17,108 @@
 
 /*
     TODO
-    Timer
+    wheel function
+
 */
 
-var init = function() {
-    var addStyle = typeof GM_addStyle !== 'undefined' ? GM_addstyle :
-    function (css) {
+
+// interface
+var cElement = function (tag, insert, property, func) {
+    var _DIRECT = [
+    'className',
+    'innerHTML',
+    'textContent'
+    ];
+    var element;
+    if (!tag)
+    element = document.createTextNode(property);
+    else
+    element = document.createElement(tag);
+    if (insert) {
+    var parent;
+    var before = null;
+    if (insert.constructor === Array) {
+        var target = insert[1];
+        if (typeof target === 'number') {
+        parent = insert[0];
+        before = parent.childNodes[target];
+        } else {
+            before = insert[0];
+            parent = before.parentNode;
+            if (target === 'next') {
+                before = before.nextSibling;
+            }
+            if (target === 'prev') {
+                before = before.previousSibling;
+            }
+        }
+    } else {
+        parent = insert;
+    }
+    parent.insertBefore(element, before);
+    }
+    if (!tag)
+    return element;
+    if (property) {
+    if (typeof property === 'object') {
+        for (var i in property) {
+        if (property.hasOwnProperty(i)) {
+            if (_DIRECT.contains(i))
+            element[i] = property[i];
+            else
+            element.setAttribute(i, property[i]);
+        }
+        }
+    } else {
+        element.textContent = property;
+    }
+    }
+    if (func) {
+    element.addEventListener('click', func, false);
+    }
+    return element;
+};
+
+
+var addStyle = typeof GM_addStyle !== 'undefined' ? GM_addstyle :
+function (css) {
     var parent = document.head || document.documentElement;
     var style = document.createElement('style');
     style.type = 'text/css';
     var textNode = document.createTextNode(css);
     style.appendChild(textNode);
     parent.appendChild(style);
-    };
+};
+/*
+// fixed navbar
+$("body > nav").addClass("fixed-top");
+addStyle("#comicscroll img {padding-top:56px; margin-bottom:0px}")
+*/
 
-    // fixed navbar
-    $("body > nav").addClass("fixed-top");
-    addStyle("#comicscroll img {padding-top:56px; margin-bottom:0px}")
-}
+var toggleTimer = function () {
+    console.log('toggleTimer called');
+    var second = document.getElementById('pageTimer').value;
+    if (second < 1 || isNaN(second)) {
+      return;
+    }
+    toggleTimer.flag = toggleTimer.flag ? 0 : 1;
+    if (toggleTimer.flag) {
+      var pagerButton = document.getElementById('autoPager');
+      pagerButton.firstChild.classList.add('icon_white');
+      toggleTimer.interval = setInterval(nextPanel, second * 1000);
+    } else {
+      var pagerButton = document.getElementById('autoPager');
+      pagerButton.firstChild.classList.remove('icon_white');
+      clearInterval(toggleTimer.interval);
+    }
+};
 
-init()
+addStyle(".icon_white {color: rgba(255,255,255,1);}")
+
+// add timer
+var pager_html = '<li class="nav-item"><a class="nav-link" title="t key" id="autoPager"><span class="oi oi-clock"></span>타이머</a></li>'+
+'<input class="form-control" id="pageTimer" type="text" value="10">'
+$("#navcollap > ul.navbar-nav.mr-auto").append(pager_html);
+addStyle("#pageTimer {width:3rem; height:2rem; align-self:center}")
+$("#autoPager").on('click', toggleTimer);
+$(document).bind('keydown','t',toggleTimer);
