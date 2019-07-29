@@ -18,9 +18,7 @@
 /*
     TODO
     wheel function
-
 */
-
 
 // interface
 var cElement = function (tag, insert, property, func) {
@@ -113,6 +111,23 @@ var toggleTimer = function () {
     }
 };
 
+var doWheel = function (e) {
+    if ($('#comicImages').is(":hidden")) {
+        return
+    }
+    let prev_scrollTop = window.scrollY;
+    // let scrollTo = prev_scrollTop + e.deltaY;
+    // comicImages.scrollTop = scrollTo;
+    setTimeout(() => {
+      if (window.scrollY == prev_scrollTop){
+        if (e.deltaY > 0)
+          nextPanel();
+        else if (e.deltaY < 0)
+          prevPanel();
+      }
+    }, 50);
+  };
+
 addStyle(".icon_white {color: rgba(255,255,255,1);}")
 
 // add timer
@@ -122,3 +137,4 @@ addStyle("#autoPager {float: left}")
 addStyle("#pageTimer {width:3rem; height:2rem; align-self:center; margin:calc((40px - 2rem) / 2)}")
 $("#autoPager").on('click', toggleTimer);
 $(document).bind('keydown','t',toggleTimer);
+document.addEventListener('wheel', doWheel);
