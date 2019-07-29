@@ -116,9 +116,9 @@ var toggleTimer = function () {
 addStyle(".icon_white {color: rgba(255,255,255,1);}")
 
 // add timer
-var pager_html = '<li class="nav-item"><a class="nav-link" title="t key" id="autoPager"><span class="oi oi-clock"></span>타이머</a></li>'+
-'<input class="form-control" id="pageTimer" type="text" value="10">'
+var pager_html = '<li class="nav-item"><a class="nav-link" title="t key" id="autoPager"><span class="oi oi-clock"></span>타이머</a><input class="form-control" id="pageTimer" type="text" value="10"></li>'
 $("#navcollap > ul.navbar-nav.mr-auto").append(pager_html);
-addStyle("#pageTimer {width:3rem; height:2rem; align-self:center}")
+addStyle("#autoPager {float: left}")
+addStyle("#pageTimer {width:3rem; height:2rem; align-self:center; margin:calc((40px - 2rem) / 2)}")
 $("#autoPager").on('click', toggleTimer);
 $(document).bind('keydown','t',toggleTimer);
