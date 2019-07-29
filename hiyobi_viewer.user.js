@@ -17,7 +17,6 @@
 
 /*
     TODO
-    wheel function
 */
 
 // interface
@@ -138,3 +137,9 @@ addStyle("#pageTimer {width:3rem; height:2rem; align-self:center; margin:calc((4
 $("#autoPager").on('click', toggleTimer);
 $(document).bind('keydown','t',toggleTimer);
 document.addEventListener('wheel', doWheel);
+
+
+// additional hotkeys
+$(document).bind('keydown','a',nextPanel);
+$(document).bind('keydown','d',prevPanel);
+$(document).bind('keydown','space',fullscreen);
