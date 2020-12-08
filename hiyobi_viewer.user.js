@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          hiyobi_viewer
 // @namespace     skygarlics
-// @version       190729
+// @version       201208
 // @author        aksmf
 // @description   image viewer for hiyobi
 // @include       https://hiyobi.me/reader/*
